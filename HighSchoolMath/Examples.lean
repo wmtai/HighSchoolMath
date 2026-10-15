@@ -99,3 +99,24 @@ example (x y : ℝ) (h : 3 * x = 3 * y) : x = y := by
   have ha : (3:ℝ) ≠ 0 := by norm_num
   revert h
   exact HighSchoolMath.Algebra.cancel_mul_left (3:ℝ) x y ha
+
+
+example : ((11 : ℝ) - 4) + 4 = 11 := by
+  exact HighSchoolMath.Algebra.sub_add_restore 11 4
+
+example (x y : ℝ) (h : x + 5 = y + 5) : x = y := by
+  revert h
+  exact (HighSchoolMath.Algebra.add_same_right_iff x y 5).mp
+
+example (x y : ℝ) : (0 : ℝ) * x = 0 * y := by
+  apply (HighSchoolMath.Algebra.mul_same_left_iff 0 x y).mpr;
+  left
+  rfl
+
+example : ∃ x : ℝ, x + 3 = 10 := by
+  exact HighSchoolMath.Algebra.exists_add_solution 3 10
+
+example :
+    ∃ x : ℝ, x + 3 = 10 ∧
+      ∀ y : ℝ, y + 3 = 10 → y = x := by
+  exact HighSchoolMath.Algebra.exists_add_solution_unique 3 10
