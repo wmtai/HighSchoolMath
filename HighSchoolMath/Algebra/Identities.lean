@@ -10,9 +10,9 @@ public section
 
 namespace HighSchoolMath.Algebra
 
-theorem twice_eq_two_mul (x : ℝ) :
+theorem twice_eq_two_mul {R : Type*} [Semiring R] (x : R) :
     x + x = 2 * x := by
-  ring
+  symm; exact two_mul x
 
 theorem add_zero_left (x : ℝ) : 0 + x = x := by
   exact zero_add x
@@ -47,6 +47,35 @@ theorem triple_eq_three_mul (x : ℝ) :
     _ = 2*x + 1*x := by rw [one_mul]
     _ = (2+1) * x := by rw [← add_mul]
     _ = 3 * x := by norm_num
+
+theorem add_rearrange (x y z : ℝ) :
+    (x + y) + z = (x + z) + y := by
+  calc
+    (x + y) + z = x + (y + z) := by rw [add_assoc]
+    _ = x + (z + y) := by rw [add_comm y z]
+    _ = (x + z) + y := by rw [add_assoc]
+
+theorem factor_four_terms (a b x y : ℝ) :
+    a * x + a * y + b * x + b * y =
+      (a + b) * (x + y) := by
+  calc
+    a * x + a * y + b * x + b * y = (a * x + a * y) + (b * x + b * y) := by rw [add_assoc]
+    _ = a * (x + y) + b * (x + y) := by rw [← mul_add, ← mul_add]
+    _ = (a + b) * (x + y) := by rw [← add_mul]
+
+theorem square_add (x y : ℝ) :
+    (x + y) ^ 2 = x ^ 2 + 2 * x * y + y ^ 2 := by
+  ring
+
+theorem square_sub (x y : ℝ) :
+    (x - y) ^ 2 = x ^ 2 - 2 * x * y + y ^ 2 := by
+  ring
+
+theorem difference_of_squares (x y : ℝ) :
+    x ^ 2 - y ^ 2 = (x - y) * (x + y) := by
+  ring
+
+
 
 
 end HighSchoolMath.Algebra
