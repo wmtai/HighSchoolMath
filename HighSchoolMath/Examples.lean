@@ -278,3 +278,165 @@ example :
   norm_num
   rw [affine_apply (-2) 3 x, linear_le_iff_of_neg (-2) 3 11 x (show -2 < 0 by norm_num)]
   norm_num
+
+
+open HighSchoolMath.Quadratics
+
+example (a b c x : ℝ) :
+    (⟨a, b, c⟩ : Quadratic).eval x =
+      a * x ^ 2 + b * x + c := by
+  exact Quadratic.eval_mk a b c x
+
+example (q : Quadratic) : q.eval 0 = q.c := by
+  exact Quadratic.eval_zero q
+
+example (x : ℝ) :
+    (⟨1, -5, 6⟩ : Quadratic).eval x =
+      (x - 2) * (x - 3) := by
+  have h := Quadratic.eval_factored 1 2 3 x
+  norm_num at h
+  exact h
+
+example (x : ℝ) :
+    (⟨1, -5, 6⟩ : Quadratic).IsRoot x ↔
+      x = 2 ∨ x = 3 := by
+  have h := Quadratic.isRoot_factored_iff
+    1 2 3 x (by norm_num)
+  norm_num at h
+  exact h
+
+example (q : Quadratic) (x : ℝ) :
+    (2 * q.a * x + q.b) ^ 2 - q.discrim =
+      4 * q.a * q.eval x := by
+  exact Quadratic.completing_square q x
+
+example (q : Quadratic) (x : ℝ) (ha : q.a ≠ 0) :
+    q.IsRoot x ↔
+      (2 * q.a * x + q.b) ^ 2 = q.discrim := by
+  exact Quadratic.isRoot_iff_completed_square q x ha
+
+example : (⟨1, -5, 6⟩ : Quadratic).IsRoot 3 := by
+  have h := Quadratic.rootPlus_isRoot
+    (⟨1, -5, 6⟩ : Quadratic)
+    (by norm_num)
+    (by norm_num [Quadratic.discrim])
+  norm_num [Quadratic.rootPlus, Quadratic.discrim] at h
+  exact h
+
+example : (⟨1, -5, 6⟩ : Quadratic).IsRoot 2 := by
+  have h := Quadratic.rootMinus_isRoot
+    (⟨1, -5, 6⟩ : Quadratic)
+    (by norm_num)
+    (by norm_num [Quadratic.discrim])
+  norm_num [Quadratic.rootMinus, Quadratic.discrim] at h
+  exact h
+
+example (x : ℝ) :
+    (⟨1, -4, 4⟩ : Quadratic).IsRoot x ↔ x = 2 := by
+  have h := Quadratic.isRoot_factored_iff
+    1 2 2 x (by norm_num)
+  norm_num at h
+  exact h
+
+-- Positive discriminant: exactly two formula roots.
+example (x : ℝ) :
+    (⟨1, -5, 6⟩ : Quadratic).IsRoot x ↔
+      x = 3 ∨ x = 2 := by
+  have h := Quadratic.isRoot_iff_formula
+    (⟨1, -5, 6⟩ : Quadratic) x (by norm_num)
+    (by norm_num [Quadratic.discrim])
+  norm_num [
+    Quadratic.rootPlus, Quadratic.rootMinus, Quadratic.discrim
+  ] at h
+  exact h
+
+example :
+    (⟨1, -5, 6⟩ : Quadratic).rootPlus ≠
+      (⟨1, -5, 6⟩ : Quadratic).rootMinus := by
+  exact Quadratic.rootPlus_ne_rootMinus
+    (⟨1, -5, 6⟩ : Quadratic) (by norm_num)
+    (by norm_num [Quadratic.discrim])
+
+-- Zero discriminant: one repeated root.
+example (x : ℝ) :
+    (⟨1, -4, 4⟩ : Quadratic).IsRoot x ↔ x = 2 := by
+  have h := Quadratic.isRoot_iff_of_discrim_eq_zero
+    (⟨1, -4, 4⟩ : Quadratic) x (by norm_num)
+    (by norm_num [Quadratic.discrim])
+  norm_num at h
+  exact h
+
+-- Negative discriminant: no real root.
+example (x : ℝ) :
+    ¬ (⟨1, 0, 1⟩ : Quadratic).IsRoot x := by
+  exact Quadratic.not_isRoot_of_discrim_neg
+    (⟨1, 0, 1⟩ : Quadratic) x (by norm_num)
+    (by norm_num [Quadratic.discrim])
+
+example :
+    ∃ x : ℝ, (⟨1, -4, 4⟩ : Quadratic).IsRoot x := by
+  apply (Quadratic.exists_root_iff
+    (⟨1, -4, 4⟩ : Quadratic) (by norm_num)).mpr
+  norm_num [Quadratic.discrim]
+
+-- Completing the square and attaining the minimum.
+example (x : ℝ) :
+    (⟨1, -4, 7⟩ : Quadratic).eval x =
+      (x - 2) ^ 2 + 3 := by
+  have h := Quadratic.eval_vertex_form
+    (⟨1, -4, 7⟩ : Quadratic) x (by norm_num)
+  norm_num [
+    Quadratic.vertex, Quadratic.vertexValue, Quadratic.discrim
+  ] at h
+  exact h
+
+example :
+    (⟨1, -4, 7⟩ : Quadratic).eval 2 = 3 := by
+  have h := Quadratic.eval_vertex
+    (⟨1, -4, 7⟩ : Quadratic) (by norm_num)
+  norm_num [
+    Quadratic.vertex, Quadratic.vertexValue, Quadratic.discrim
+  ] at h
+  exact h
+
+example (x : ℝ) :
+    3 ≤ (⟨1, -4, 7⟩ : Quadratic).eval x := by
+  have h := Quadratic.vertexValue_le_eval
+    (⟨1, -4, 7⟩ : Quadratic) x (by norm_num)
+  norm_num [Quadratic.vertexValue, Quadratic.discrim] at h
+  exact h
+
+example (x : ℝ) :
+    (⟨1, -4, 7⟩ : Quadratic).eval x = 3 ↔ x = 2 := by
+  have h := Quadratic.eval_eq_vertexValue_iff
+    (⟨1, -4, 7⟩ : Quadratic) x (by norm_num)
+  norm_num [
+    Quadratic.vertex, Quadratic.vertexValue, Quadratic.discrim
+  ] at h
+  exact h
+
+example :
+    ∀ x : ℝ, 0 ≤ (⟨1, -4, 7⟩ : Quadratic).eval x := by
+  apply (Quadratic.nonneg_everywhere_iff
+    (⟨1, -4, 7⟩ : Quadratic) (by norm_num)).mpr
+  norm_num [Quadratic.discrim]
+
+-- A zero leading coefficient reduces to Chapter 2.
+example (x : ℝ) :
+    (⟨0, 2, -6⟩ : Quadratic).IsRoot x ↔ x = 3 := by
+  have h := HighSchoolMath.Algebra.linear_eq_iff
+    2 (-6) 0 x (by norm_num)
+  norm_num at h
+  simpa [Quadratic.IsRoot, Quadratic.eval] using h
+
+-- Root classification also handles a negative leading coefficient.
+example (x : ℝ) :
+    (⟨-1, 5, -6⟩ : Quadratic).IsRoot x ↔
+      x = 2 ∨ x = 3 := by
+  have h := Quadratic.isRoot_iff_formula
+    (⟨-1, 5, -6⟩ : Quadratic) x (by norm_num)
+    (by norm_num [Quadratic.discrim])
+  norm_num [
+    Quadratic.rootPlus, Quadratic.rootMinus, Quadratic.discrim
+  ] at h
+  exact h
