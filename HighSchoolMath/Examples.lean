@@ -440,3 +440,168 @@ example (x : ℝ) :
     Quadratic.rootPlus, Quadratic.rootMinus, Quadratic.discrim
   ] at h
   exact h
+
+
+open HighSchoolMath.Sequences
+
+example (a d : ℝ) : arithmetic a d 0 = a := by
+  exact arithmetic_zero a d
+
+example (n : ℕ) :
+    arithmetic 2 3 (n + 1) = arithmetic 2 3 n + 3 := by
+  exact arithmetic_succ 2 3 n
+
+example (n : ℕ) :
+    arithmeticSum 2 3 (n + 1) =
+      arithmeticSum 2 3 n + arithmetic 2 3 n := by
+  exact arithmeticSum_succ 2 3 n
+
+-- 2 + 5 + ... + 29 = 155: ten terms.
+example : arithmeticSum 2 3 10 = 155 := by
+  have h := arithmeticSum_twice 2 3 10
+  norm_num at h
+  linarith
+
+example : arithmeticSum 1 1 100 = 5050 := by
+  have h := arithmeticSum_formula 1 1 100
+  norm_num at h
+  exact h
+
+example (a r : ℝ) : geometric a r 0 = a := by
+  exact geometric_zero a r
+
+example (n : ℕ) :
+    geometric 3 2 (n + 1) = geometric 3 2 n * 2 := by
+  exact geometric_succ 3 2 n
+
+example (n : ℕ) :
+    geometricSum 3 2 (n + 1) =
+      geometricSum 3 2 n + geometric 3 2 n := by
+  exact geometricSum_succ 3 2 n
+
+example (r : ℝ) :
+    geometricSum 3 r 5 * (r - 1) =
+      3 * (r ^ 5 - 1) := by
+  exact geometricSum_mul_sub 3 r 5
+
+-- 3 + 6 + 12 + 24 + 48 = 93.
+example : geometricSum 3 2 5 = 93 := by
+  have h := geometricSum_formula 3 2 5 (by norm_num)
+  norm_num at h
+  exact h
+
+-- Ratio 1.
+example : geometricSum 7 1 4 = 28 := by
+  have h := geometricSum_one 7 4
+  norm_num at h
+  exact h
+
+-- Empty sums.
+example (a d : ℝ) : arithmeticSum a d 0 = 0 := by
+  simp [arithmeticSum]
+
+example (a r : ℝ) : geometricSum a r 0 = 0 := by
+  simp [geometricSum]
+
+-- Ratio 0: only the first term contributes.
+example (n : ℕ) : geometricSum 5 0 (n + 1) = 5 := by
+  have h := geometricSum_formula 5 0 (n + 1) (by norm_num)
+  norm_num [pow_succ] at h
+  exact h
+
+-- A negative ratio is also allowed.
+example : geometricSum 3 (-2) 4 = -15 := by
+  have h := geometricSum_formula 3 (-2) 4 (by norm_num)
+  norm_num at h
+  exact h
+
+
+open HighSchoolMath.Geometry
+
+example (p q : Point) : 0 ≤ sqDist p q := by
+  exact sqDist_nonneg p q
+
+example (p q : Point) : sqDist p q = sqDist q p := by
+  exact sqDist_symm p q
+
+example (p q : Point) : sqDist p q = 0 ↔ p = q := by
+  exact sqDist_eq_zero_iff p q
+
+example (p q : Point) : 0 ≤ pointDist p q := by
+  exact pointDist_nonneg p q
+
+example : (pointDist (0, 0) (3, 4)) ^ 2 = 25 := by
+  have h := pointDist_sq (0, 0) (3, 4)
+  norm_num [sqDist] at h
+  exact h
+
+example (p q : Point) :
+    pointDist p q = pointDist q p := by
+  exact pointDist_symm p q
+
+example (p : Point) : pointDist p p = 0 := by
+  exact (pointDist_eq_zero_iff p p).mpr rfl
+
+example (p q : Point) :
+    pointDist p (pointMidpoint p q) =
+      pointDist (pointMidpoint p q) q := by
+  exact pointMidpoint_equidistant p q
+
+example (p q : Point) :
+    (pointDist p q) ^ 2 =
+      (pointDist p (q.1, p.2)) ^ 2 +
+      (pointDist (q.1, p.2) q) ^ 2 := by
+  exact pythagorean_axis_aligned p q
+
+-- y = 2x + 1 and y = -x + 7 meet at (2, 5).
+example :
+    OnLine (⟨2, 1⟩ : Line) (2, 5) ∧
+      OnLine (⟨-1, 7⟩ : Line) (2, 5) := by
+  have h := intersection_on_both
+    (⟨2, 1⟩ : Line) (⟨-1, 7⟩ : Line) (by norm_num)
+  norm_num [intersectionPoint, intersectionX] at h
+  exact h
+
+example (p : Point) :
+    (OnLine (⟨2, 1⟩ : Line) p ∧
+      OnLine (⟨-1, 7⟩ : Line) p) ↔ p = (2, 5) := by
+  have h := on_both_iff_eq_intersection
+    (⟨2, 1⟩ : Line) (⟨-1, 7⟩ : Line) p (by norm_num)
+  norm_num [intersectionPoint, intersectionX] at h
+  exact h
+
+-- Parallel, distinct lines.
+example : ¬ ∃ p : Point,
+    OnLine (⟨2, 1⟩ : Line) p ∧
+      OnLine (⟨2, 4⟩ : Line) p := by
+  exact no_common_point_of_parallel
+    (⟨2, 1⟩ : Line) (⟨2, 4⟩ : Line) rfl (by norm_num)
+
+example (l1 l2 : Line) (p : Point)
+    (hm : l1.m = l2.m) (hb : l1.b = l2.b) :
+    OnLine l1 p ↔ OnLine l2 p := by
+  exact onLine_iff_of_same_coeffs l1 l2 p hm hb
+
+-- Coincident horizontal lines have common points.
+example : ∃ p : Point,
+    OnLine (⟨0, 3⟩ : Line) p ∧
+      OnLine (⟨0, 3⟩ : Line) p := by
+  apply (has_common_point_iff
+    (⟨0, 3⟩ : Line) (⟨0, 3⟩ : Line)).mpr
+  right
+  rfl
+
+example : pointDist (0, 0) (3, 4) = 5 := by
+  norm_num [pointDist, sqDist]
+
+example : pointMidpoint (0, 0) (4, 6) = (2, 3) := by
+  norm_num [pointMidpoint]
+
+-- A horizontal line meeting a sloped line.
+example (p : Point) :
+    (OnLine (⟨0, 3⟩ : Line) p ∧
+      OnLine (⟨2, -1⟩ : Line) p) ↔ p = (2, 3) := by
+  have h := on_both_iff_eq_intersection
+    (⟨0, 3⟩ : Line) (⟨2, -1⟩ : Line) p (by norm_num)
+  norm_num [intersectionPoint, intersectionX] at h
+  exact h

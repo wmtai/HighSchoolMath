@@ -10,6 +10,10 @@ public import HighSchoolMath.Algebra.Functions
 public import HighSchoolMath.Quadratics.Basic
 public import HighSchoolMath.Quadratics.Roots
 public import HighSchoolMath.Quadratics.Bounds
+public import HighSchoolMath.Sequences.Arithmetic
+public import HighSchoolMath.Sequences.Geometric
+public import HighSchoolMath.Geometry.Coordinates
+public import HighSchoolMath.Geometry.Lines
 
 /-!
 # HighSchoolMath
