@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 wmtai. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: wmtai
+-/
 module
 
 public import HighSchoolMath.Basic
@@ -14,6 +19,7 @@ public import HighSchoolMath.Sequences.Arithmetic
 public import HighSchoolMath.Sequences.Geometric
 public import HighSchoolMath.Geometry.Coordinates
 public import HighSchoolMath.Geometry.Lines
+public import HighSchoolMath.Sequences.SumSquares
 
 /-!
 # HighSchoolMath

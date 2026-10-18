@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 wmtai. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: wmtai
+-/
 module
 
 public import HighSchoolMath.Basic
@@ -32,7 +37,7 @@ theorem eval_mk (a b c x : ℝ) :
   unfold eval
   rfl
 
-theorem eval_zero (q : Quadratic) :
+@[simp] theorem eval_zero (q : Quadratic) :
     q.eval 0 = q.c := by
   unfold eval
   norm_num

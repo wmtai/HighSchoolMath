@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 wmtai. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: wmtai
+-/
 module
 
 public import HighSchoolMath.Basic
@@ -18,7 +23,7 @@ def arithmetic (a d : ℝ) (n : ℕ) : ℝ :=
 def arithmeticSum (a d : ℝ) (n : ℕ) : ℝ :=
   ∑ k ∈ Finset.range n, arithmetic a d k
 
-theorem arithmetic_zero (a d : ℝ) :
+@[simp] theorem arithmetic_zero (a d : ℝ) :
     arithmetic a d 0 = a := by
   unfold arithmetic
   norm_num

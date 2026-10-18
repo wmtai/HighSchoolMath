@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 wmtai. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: wmtai
+-/
 module
 
 public import HighSchoolMath.Quadratics.Basic
@@ -42,7 +47,7 @@ theorem rootMinus_isRoot (q : Quadratic) (ha : q.a ≠ 0)
   exact hΔ
 
 
-theorem helper (u v : ℝ) (h : u ^ 2 = v ^ 2) :
+theorem eq_or_eq_neg_of_sq_eq (u v : ℝ) (h : u ^ 2 = v ^ 2) :
     u = v ∨ u = -v := by
   have hp : (u - v) * (u + v) = 0 := by
     nlinarith
@@ -60,7 +65,7 @@ theorem isRoot_iff_formula (q : Quadratic) (x : ℝ)
   · rw [isRoot_iff_completed_square q x ha] at h
     rw [← Real.sq_sqrt hΔ] at h
     have h1: 2 * q.a * x + q.b = √q.discrim ∨ 2 * q.a * x + q.b = - √q.discrim := by
-      exact helper (2 * q.a * x + q.b) (√q.discrim) h
+      exact eq_or_eq_neg_of_sq_eq (2 * q.a * x + q.b) (√q.discrim) h
     rcases h1 with h1|h1
     · left; rw [rootPlus, ← h1]; norm_num [ha]
     · right;

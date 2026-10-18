@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 wmtai. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: wmtai
+-/
 module
 
 public import HighSchoolMath.Basic
@@ -57,7 +62,7 @@ theorem pointDist_symm (p q : Point) :
   unfold pointDist
   rw [sqDist_symm]
 
-theorem pointDist_eq_zero_iff (p q : Point) :
+@[simp] theorem pointDist_eq_zero_iff (p q : Point) :
     pointDist p q = 0 ↔ p = q := by
   unfold pointDist
   rw [Real.sqrt_eq_zero (sqDist_nonneg p q)]

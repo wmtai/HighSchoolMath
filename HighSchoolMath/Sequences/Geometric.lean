@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 wmtai. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: wmtai
+-/
 module
 
 public import HighSchoolMath.Basic
@@ -18,7 +23,7 @@ def geometric (a r : ℝ) (n : ℕ) : ℝ :=
 def geometricSum (a r : ℝ) (n : ℕ) : ℝ :=
   ∑ k ∈ Finset.range n, geometric a r k
 
-theorem geometric_zero (a r : ℝ) :
+@[simp] theorem geometric_zero (a r : ℝ) :
     geometric a r 0 = a := by
   unfold geometric
   ring
